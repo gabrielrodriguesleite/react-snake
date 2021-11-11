@@ -1,0 +1,22 @@
+
+.Snake {
+  background-color: forestgreen;
+  width: 20rem;
+  height: 20rem;
+}
+
+.fruta {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background-color: red;
+  border: 1px solid greenyellow;
+}
+
+.serpenteCorpo {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background-color: rgb(71, 88, 49);
+  border: 1px solid aliceblue;
+}
