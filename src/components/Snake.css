@@ -6,7 +6,7 @@
 }
 
 .fruta {
-  position: absolute;
+  position: fixed;
   width: 1rem;
   height: 1rem;
   background-color: red;
@@ -14,9 +14,19 @@
 }
 
 .serpenteCorpo {
-  position: absolute;
+  position: fixed;
   width: 1rem;
   height: 1rem;
   background-color: rgb(71, 88, 49);
   border: 1px solid aliceblue;
+}
+
+#reiniciar {
+  position: absolute;
+  top: 21rem;
+  left: 8rem;
+}
+
+#score {
+  color: aliceblue
 }
