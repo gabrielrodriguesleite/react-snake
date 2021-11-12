@@ -14,6 +14,7 @@ export default class Snake extends React.Component {
       run: false,
       score: 0,
       best: 0,
+      dead: false,
     }
     this.teclado = this.teclado.bind(this);
     this.move = this.move.bind(this);
@@ -59,10 +60,10 @@ export default class Snake extends React.Component {
       // o correto é comparar snake[0] e snake[1];
       if(!('ad'.includes(t) && 'ad'.includes(this.state.dir))
       && !('ws'.includes(t) && 'ws'.includes(this.state.dir))) {
-        this.setState({
+        this.setState(({dead})=>({
           dir: t,
-          run: true,
-        })
+          run: dead ? false : true,
+        }))
       }
     }
   }
@@ -70,13 +71,14 @@ export default class Snake extends React.Component {
   reiniciar() {
     console.log('reiniciar');
     if(this.state.score > this.state.best) this.setState(({score, best})=>({best: score}));
-    if(this.state.run) {
+    if(!this.state.run) {
       this.setState({
         snake: [[10, 8],[10, 9],[10, 10]],
         fruit: [2, 2],
         dir: 'a',
         run: false,
         score: 0,
+        dead: false,
       });
     }
   }
@@ -93,23 +95,27 @@ export default class Snake extends React.Component {
   sensores() {
     const {snake} = this.state;
     const [hx, hy] = snake[0];
+    // parede
+    if (( hx+1 > H || hx < 0) || (hy+1 > V || hy < 0)) this.setState({
+      dead: true,
+      run: false,
+    })
+    // corpo
     // fruta
     if(( hx === this.state.fruit[0] && hy === this.state.fruit[1])) {
       this.setState(({score, snake}) => ({
         score: score + 1,
-        // TODO: sorteia fruta
         fruit: this.sorteiaFruta(H, V, snake)
       }));
       
     } else { 
-      this.setState(({snake}) => {
+      this.setState(({snake, dead}) => {
         let ps = [...snake];
-        ps.pop();
+        if(dead) ps.shift();
+        else ps.pop();
         return {snake: ps}
       });
     }
-    // corpo
-    // parede
   }
 
   sorteiaPos(x, y) {
