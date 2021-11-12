@@ -13,6 +13,7 @@ export default class Snake extends React.Component {
       dir: 'a',
       run: false,
       score: 0,
+      best: 0,
     }
     this.teclado = this.teclado.bind(this);
     this.move = this.move.bind(this);
@@ -41,18 +42,12 @@ export default class Snake extends React.Component {
       case 's': d = [0, 1]; break;
       case 'a': d = [-1, 0]; break;
       case 'd': d = [1, 0]; break;
-      default: d = [0, 0]; break; // return prevSnake;
+      default: d = [0, 0]; break;
     }
-
-    // falta teste pra não andar pra tras OK
-    // falta teste pra bater no corpo
-    // falta teste pra bater na parede
 
     let [x, y] = prevSnake[0];
     let [hx, hy] = [x+d[0], y+d[1]]
 
-
-    //if(!(hx === this.state.fruit[0] && hy === this.state.fruit[1])) ps.pop(); //reposiciona fruta
     ps.unshift([hx, hy]);
     return ps;
   }
@@ -61,7 +56,7 @@ export default class Snake extends React.Component {
     const t = e.key.toLowerCase();
     if('wasd'.includes(t)) {
       // a seguir a logica que impede voltar // TEM QUE REVISAR
-      // usar snake[0] e snake[1];
+      // o correto é comparar snake[0] e snake[1];
       if(!('ad'.includes(t) && 'ad'.includes(this.state.dir))
       && !('ws'.includes(t) && 'ws'.includes(this.state.dir))) {
         this.setState({
@@ -74,6 +69,7 @@ export default class Snake extends React.Component {
 
   reiniciar() {
     console.log('reiniciar');
+    if(this.state.score > this.state.best) this.setState(({score, best})=>({best: score}));
     if(this.state.run) {
       this.setState({
         snake: [[10, 8],[10, 9],[10, 10]],
@@ -86,7 +82,6 @@ export default class Snake extends React.Component {
   }
 
   atualizar() {
-    // console.log(Math.ceil(H*Math.random()-1));
     console.log('atualizar');
     if(this.state.run) {
       this.setState(({snake}) => ({
@@ -132,13 +127,14 @@ export default class Snake extends React.Component {
   }
 
   render() {
-    const { snake, fruit, score } = this.state;
+    const { snake, fruit, score, best } = this.state;
     return (
       <section className="Snake">
         <div className="fruta" style={{left: `${fruit[0]}rem`, top: `${fruit[1]}rem`}}></div>
         {snake.map(([x, y],id) => <div key={id} className="serpenteCorpo" style={{left: `${x}rem`, top: `${y}rem`}}></div>)}
         <button id="reiniciar" type="button" onClick={this.reiniciar}>Reiniciar</button>
         <p id="score">Score:{score}</p>
+        { best ? <p id="best">Best:{best}</p> : null}
       </section>
     );
   }

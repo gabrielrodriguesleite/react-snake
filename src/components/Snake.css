@@ -22,11 +22,18 @@
 }
 
 #reiniciar {
-  position: absolute;
+  position: fixed;
   top: 21rem;
   left: 8rem;
 }
 
 #score {
-  color: aliceblue
+  position: fixed;
+  color: aliceblue;
+}
+
+#best {
+  position: fixed;
+  color: aliceblue;
+  left: 8rem;
 }
