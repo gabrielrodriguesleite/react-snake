@@ -3,6 +3,7 @@ import './Snake.css'
 
 const H = 20;
 const V = 20;
+const sorteiaPos = (x, y) => [Math.ceil(x*Math.random()-1), Math.ceil(y*Math.random()-1)];
 
 export default class Snake extends React.Component {
   constructor() {
@@ -20,7 +21,6 @@ export default class Snake extends React.Component {
     this.move = this.move.bind(this);
     this.reiniciar = this.reiniciar.bind(this);
     this.atualizar = this.atualizar.bind(this);
-    this.sorteiaPos = this.sorteiaPos.bind(this);
     this.sorteiaFruta = this.sorteiaFruta.bind(this);
   }
 
@@ -55,9 +55,7 @@ export default class Snake extends React.Component {
 
   teclado(e, p) {
     const t = e.key.toLowerCase();
-    if ('wasd'.includes(t)) {
-      // a seguir a logica que impede voltar // TEM QUE REVISAR
-      // o correto é comparar snake[0] e snake[1];
+    if ('wasd'.includes(t)) { // agora ficou redundante mas vou deixar assim por enquanto
       let s = [...this.state.snake]
       let [hx, hy] = s[0];
       let [nx, ny] = s[1];
@@ -106,14 +104,13 @@ export default class Snake extends React.Component {
       dead: true,
       run: false,
     })
+
     // corpo
-    //if (this.state.snake.some()) this.setState({dead: true, run: false});
     let s = [...snake];
     s.shift();
     s = JSON.stringify(s);
     const h = JSON.stringify([hx , hy]);
     if ( s.indexOf(h) !== -1) this.setState({dead: true, run: false});
-    // TODO agora tem que achar um geito de impedir voltar com a cabeça contra o pescoço
 
     // fruta
     if(( hx === this.state.fruit[0] && hy === this.state.fruit[1])) {
@@ -121,7 +118,7 @@ export default class Snake extends React.Component {
         score: score + 1,
         fruit: this.sorteiaFruta(H, V, snake)
       }));
-    } else { 
+    } else { // nenhum || morreu
       this.setState(({snake, dead}) => {
         let ps = [...snake];
         if(dead) ps.shift();
@@ -131,15 +128,11 @@ export default class Snake extends React.Component {
     }
   }
 
-  sorteiaPos(x, y) {
-    return [Math.ceil(x*Math.random()-1), Math.ceil(y*Math.random()-1)]
-  }
-
   sorteiaFruta(x, y, a) {
     let ok = false;
     let pos = [];
     while(!ok) {
-      pos = this.sorteiaPos(H, V);
+      pos = sorteiaPos(H, V);
       if (!a.includes(pos)) ok = true;
     }
     return pos;
