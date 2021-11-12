@@ -55,22 +55,28 @@ export default class Snake extends React.Component {
 
   teclado(e, p) {
     const t = e.key.toLowerCase();
-    if('wasd'.includes(t)) {
+    if ('wasd'.includes(t)) {
       // a seguir a logica que impede voltar // TEM QUE REVISAR
       // o correto é comparar snake[0] e snake[1];
-      if(!('ad'.includes(t) && 'ad'.includes(this.state.dir))
-      && !('ws'.includes(t) && 'ws'.includes(this.state.dir))) {
-        this.setState(({dead})=>({
-          dir: t,
-          run: dead ? false : true,
-        }))
-      }
+      let s = [...this.state.snake]
+      let [hx, hy] = s[0];
+      let [nx, ny] = s[1];
+
+      if (( t === 'a' ) && hx -1 === nx) return;
+      if (( t === 'd' ) && hx +1 === nx) return;
+      if (( t === 'w' ) && hy -1 === ny) return;
+      if (( t === 's' ) && hy +1 === ny) return;
+
+      this.setState(({dead})=>({
+        dir: t,
+        run: dead ? false : true,
+      }));
     }
   }
 
   reiniciar() {
     console.log('reiniciar');
-    if(this.state.score > this.state.best) this.setState(({score, best})=>({best: score}));
+    if(this.state.dead && this.state.score > this.state.best) this.setState(({score, best})=>({best: score}));
     if(!this.state.run) {
       this.setState({
         snake: [[10, 8],[10, 9],[10, 10]],
@@ -101,13 +107,20 @@ export default class Snake extends React.Component {
       run: false,
     })
     // corpo
+    //if (this.state.snake.some()) this.setState({dead: true, run: false});
+    let s = [...snake];
+    s.shift();
+    s = JSON.stringify(s);
+    const h = JSON.stringify([hx , hy]);
+    if ( s.indexOf(h) !== -1) this.setState({dead: true, run: false});
+    // TODO agora tem que achar um geito de impedir voltar com a cabeça contra o pescoço
+
     // fruta
     if(( hx === this.state.fruit[0] && hy === this.state.fruit[1])) {
       this.setState(({score, snake}) => ({
         score: score + 1,
         fruit: this.sorteiaFruta(H, V, snake)
       }));
-      
     } else { 
       this.setState(({snake, dead}) => {
         let ps = [...snake];
