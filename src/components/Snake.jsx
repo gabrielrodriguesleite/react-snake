@@ -1,3 +1,6 @@
+// TODO: level up
+// TODO: nota de falecimento
+
 import React from 'react';
 import './Snake.css'
 
