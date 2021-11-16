@@ -3,7 +3,10 @@ import Snake from './components/Snake';
 
 function App() {
   return (
-    <Snake />
+    <>
+      <Snake />
+      <p>Gabriel Rodrigues Leite © 2021</p>
+    </>
   );
 }
 

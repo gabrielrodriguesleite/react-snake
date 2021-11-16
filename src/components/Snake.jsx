@@ -1,3 +1,5 @@
+// Desenvolvido por Gabriel Rodrigues Leite 2021 ©
+// Como forma de treinar js e React
 // TODO: level up
 // TODO: nota de falecimento
 
